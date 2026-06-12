@@ -10,7 +10,7 @@
     <p>
       GitGud is a fast, native Git GUI built with Electron and Angular. It provides an
       intuitive interface for managing Git repositories with branch visualization, commit
-      history, staging area management, interactive rebase, diff viewer, and more.
+      history, staging area management, interactive rebase, diff viewer, and a beautiful log like Gitkraken's.
     </p>
     <ul>
       <li>Visual branch and log graph</li>
@@ -48,7 +48,7 @@
   </provides>
 
   <releases>
-    <release version="2.4.0" date="2025-01-01">
+    <release version="2.4.1" date="2026-06-12">
       <description>
         <p>Improved draw performance and multi-size desktop icons.</p>
       </description>
