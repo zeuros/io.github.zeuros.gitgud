@@ -24,18 +24,11 @@ modules:
   - name: gitgud
     buildsystem: simple
     build-commands:
-      # Install the Electron app bundle
-      - mkdir -p /app/gitgud
-      - cp -r app/* /app/gitgud/
-      # Wrapper so Flatpak can find the binary at /app/bin/gitgud
-      - chmod +x /app/gitgud/gitgud
-      # Desktop integration
-      - install -Dm755 /app/gitgud/gitgud /app/bin/gitgud
+      - install -Dm755 bin/gitgud /app/bin/gitgud
       - install -Dm644 io.github.zeuros.gitgud.desktop
           /app/share/applications/io.github.zeuros.gitgud.desktop
       - install -Dm644 io.github.zeuros.gitgud.metainfo.xml
           /app/share/metainfo/io.github.zeuros.gitgud.metainfo.xml
-      # Icons
       - for s in 16 32 48 64 128 256 512; do
           install -Dm644 icons/${s}x${s}.png
             /app/share/icons/hicolor/${s}x${s}/apps/io.github.zeuros.gitgud.png;
@@ -44,9 +37,15 @@ modules:
     sources:
       # x86_64 binary — updated by scripts/update-flatpak-manifest.py on each release
       - type: archive
-        url: https://github.com/zeuros/gitgud/releases/download/v2.4.1/GitGud-2.4.1-Linux-x64.tar.gz
-        sha256: 16cbf47c76520b98ccad4a15c4c58ca956cd85e9d8728023f8328e21ff06e910
-        dest: app
+        only-arches: [x86_64]
+        url: https://github.com/zeuros/gitgud/releases/download/v2.5.0/GitGud-2.5.0-Linux-x64.tar.gz
+        sha256: 21c28f2ae848c5dd2cc24cf91864b4e31847445279e42e582e916c01f16915fe
+
+      # aarch64 binary — updated by scripts/update-flatpak-manifest.py on each release
+      - type: archive
+        only-arches: [aarch64]
+        url: https://github.com/zeuros/gitgud/releases/download/v2.5.0/GitGud-2.5.0-Linux-arm64.tar.gz
+        sha256: e45ecb7d291edcbb96707267031776d45f41da74b6a11f817420dea407f39416
 
       - type: file
         path: io.github.zeuros.gitgud.desktop
