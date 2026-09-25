@@ -39,13 +39,13 @@ modules:
       - type: archive
         only-arches: [x86_64]
         url: https://github.com/zeuros/gitgud/releases/download/v2.6.0/GitGud-2.6.0-Linux-x64.tar.gz
-        sha256: 65e224de7bb512ac0a3827b686dbb2ef80cb818052f854ed37f1f4ecd3c02705
+        sha256: db7c394e2fdb5bda621b199927c33b1628541373612d634f9bc13d27bb0056b7
 
       # aarch64 binary — updated by scripts/update-flatpak-manifest.py on each release
       - type: archive
         only-arches: [aarch64]
         url: https://github.com/zeuros/gitgud/releases/download/v2.6.0/GitGud-2.6.0-Linux-arm64.tar.gz
-        sha256: 7452d74329e17bba5827d383f0899ebe659df87bc6aba1b98472779e8571633d
+        sha256: d8cd7979ff10a49202677e4d43cef10fd2e5e457607250daa669f37366b5aa5e
 
       - type: file
         path: io.github.zeuros.gitgud.desktop
