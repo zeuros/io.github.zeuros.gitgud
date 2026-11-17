@@ -78,7 +78,7 @@ modules:
     sources:
       - type: archive
         url: https://github.com/zeuros/gitgud/archive/refs/tags/v2.14.0.tar.gz
-        sha256: 846a48ade881fe2e40797bdd99c85d381de7acf818c4b77818f5bf0e28bffc9d
+        sha256: 076aec8d8c700880e984d15998ad2745de1e9b04427e823d8d333905f918c4d2
 
       # Generated from the tag's lockfiles by flatpak-builder-tools: flatpak-cargo-generator and flatpak-node-generator
       - cargo-sources.json
