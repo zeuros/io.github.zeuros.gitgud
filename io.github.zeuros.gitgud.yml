@@ -7,7 +7,6 @@ sdk-extensions:
   - org.freedesktop.Sdk.Extension.rust-stable
   - org.freedesktop.Sdk.Extension.node26
 command: gitgud
-separate-locales: false
 
 finish-args:
   - --share=ipc
@@ -24,9 +23,10 @@ modules:
     buildsystem: simple
     build-options:
       append-path: /usr/lib/sdk/rust-stable/bin
+      cflags: -Os -flto
+      ldflags: -flto
     build-commands:
-      - make -j$FLATPAK_BUILDER_N_JOBS prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1 CFLAGS='-Os -flto' LDFLAGS='-flto'
-      - make install prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1 CFLAGS='-Os -flto' LDFLAGS='-flto'
+      - make -j$FLATPAK_BUILDER_N_JOBS install prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1 CFLAGS="$CFLAGS" LDFLAGS="$LDFLAGS"
     cleanup:
       - /share/gitweb
       - /bin/scalar
