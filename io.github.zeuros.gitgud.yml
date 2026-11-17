@@ -3,6 +3,9 @@ app-id: io.github.zeuros.gitgud
 runtime: org.gnome.Platform
 runtime-version: "51"
 sdk: org.gnome.Sdk
+sdk-extensions:
+  - org.freedesktop.Sdk.Extension.rust-stable
+  - org.freedesktop.Sdk.Extension.node26
 command: gitgud
 separate-locales: false
 
@@ -18,36 +21,36 @@ finish-args:
 modules:
   - name: gitgud
     buildsystem: simple
+    build-options:
+      append-path: /usr/lib/sdk/rust-stable/bin:/usr/lib/sdk/node26/bin
+      env:
+        CARGO_HOME: /run/build/gitgud/cargo
+        XDG_CACHE_HOME: /run/build/gitgud/flatpak-node/cache
+        npm_config_cache: /run/build/gitgud/flatpak-node/npm-cache
+        npm_config_offline: "true"
+        NG_CLI_ANALYTICS: "false"
     build-commands:
-      - install -Dm755 bin/gitgud /app/bin/gitgud
-      - install -Dm644 io.github.zeuros.gitgud.desktop
+      # Install scripts only check or fetch prebuilt binaries, which the lockfile's platform packages already hold
+      - npm ci --offline --ignore-scripts
+      - npm run build:angular
+      # custom-protocol serves the built frontend, as `tauri build` does; without it the app loads the dev server URL
+      - cargo build --release --offline --features tauri/custom-protocol --manifest-path src-tauri/Cargo.toml
+      - install -Dm755 src-tauri/target/release/gitgud /app/bin/gitgud
+      - install -Dm644 build/flatpak/io.github.zeuros.gitgud.desktop
           /app/share/applications/io.github.zeuros.gitgud.desktop
-      - install -Dm644 io.github.zeuros.gitgud.metainfo.xml
+      - install -Dm644 build/flatpak/io.github.zeuros.gitgud.metainfo.xml
           /app/share/metainfo/io.github.zeuros.gitgud.metainfo.xml
-      - for s in 16 32 48 64 128 256 512; do
-          install -Dm644 icons/${s}x${s}.png
-            /app/share/icons/hicolor/${s}x${s}/apps/io.github.zeuros.gitgud.png;
-        done
+      - install -Dm644 src-tauri/icons/32x32.png /app/share/icons/hicolor/32x32/apps/io.github.zeuros.gitgud.png
+      - install -Dm644 src-tauri/icons/64x64.png /app/share/icons/hicolor/64x64/apps/io.github.zeuros.gitgud.png
+      - install -Dm644 src-tauri/icons/128x128.png /app/share/icons/hicolor/128x128/apps/io.github.zeuros.gitgud.png
+      - install -Dm644 src-tauri/icons/128x128@2x.png /app/share/icons/hicolor/256x256/apps/io.github.zeuros.gitgud.png
+      - install -Dm644 src-tauri/icons/icon.png /app/share/icons/hicolor/512x512/apps/io.github.zeuros.gitgud.png
 
     sources:
-      # x86_64 binary — updated by scripts/update-flatpak-manifest.py on each release
       - type: archive
-        only-arches: [x86_64]
-        url: https://github.com/zeuros/gitgud/releases/download/v2.13.1/GitGud-2.13.1-Linux-x64.tar.gz
-        sha256: bf4c36e435b82394748248c4c44f5285e8eabbf1e8b328a1e798e6e749b01e19
+        url: https://github.com/zeuros/gitgud/archive/refs/tags/v2.13.1.tar.gz
+        sha256: 4951cee2d30c4cce8ee893db975191ad4a138c7e57bf0ca4020bd56f0e6d5f63
 
-      # aarch64 binary — updated by scripts/update-flatpak-manifest.py on each release
-      - type: archive
-        only-arches: [aarch64]
-        url: https://github.com/zeuros/gitgud/releases/download/v2.13.1/GitGud-2.13.1-Linux-arm64.tar.gz
-        sha256: 43501b346697523b2137e515dde67a7afbee9aefd660cb8a41c2db6e1aca72d6
-
-      - type: file
-        path: io.github.zeuros.gitgud.desktop
-
-      - type: file
-        path: io.github.zeuros.gitgud.metainfo.xml
-
-      - type: dir
-        path: icons
-        dest: icons
+      # Generated from the tag's lockfiles by flatpak-builder-tools: flatpak-cargo-generator and flatpak-node-generator
+      - cargo-sources.json
+      - node-sources.json
