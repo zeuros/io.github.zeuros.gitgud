@@ -17,6 +17,7 @@ finish-args:
   - --device=dri
   - --filesystem=home
   - --socket=ssh-auth
+  - --talk-name=org.freedesktop.secrets
 
 modules:
   - name: git
@@ -24,10 +25,20 @@ modules:
     build-options:
       append-path: /usr/lib/sdk/rust-stable/bin
     build-commands:
-      - make -j$FLATPAK_BUILDER_N_JOBS prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1
-      - make install prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1
+      - make -j$FLATPAK_BUILDER_N_JOBS prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1 CFLAGS='-Os -flto' LDFLAGS='-flto'
+      - make install prefix=/app NO_TCLTK=1 NO_PERL=1 NO_PYTHON=1 NO_GETTEXT=1 USE_LIBPCRE2=1 INSTALL_SYMLINKS=1 CFLAGS='-Os -flto' LDFLAGS='-flto'
     cleanup:
       - /share/gitweb
+      - /bin/scalar
+      - /bin/git-shell
+      - /bin/git-cvsserver
+      - /libexec/git-core/git-daemon
+      - /libexec/git-core/git-http-backend
+      - /libexec/git-core/git-http-fetch
+      - /libexec/git-core/git-http-push
+      - /libexec/git-core/git-imap-send
+      - /libexec/git-core/git-cvsserver
+      - /libexec/git-core/git-shell
     sources:
       - type: archive
         url: https://www.kernel.org/pub/software/scm/git/git-2.56.1.tar.xz
