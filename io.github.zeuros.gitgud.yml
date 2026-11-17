@@ -1,7 +1,7 @@
 app-id: io.github.zeuros.gitgud
 # Tauri app: the GNOME runtime provides WebKitGTK 4.1, GTK 3 and libsoup 3 the binary links to
 runtime: org.gnome.Platform
-runtime-version: "50"
+runtime-version: "51"
 sdk: org.gnome.Sdk
 command: gitgud
 separate-locales: false
